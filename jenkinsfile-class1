@@ -1,6 +1,15 @@
 node
 {
     def MavenHome=tool name:"Maven-3.8.4"
+    
+    echo "GitHub BranhName ${env.BRANCH_NAME}"
+      echo "Jenkins Job Number ${env.BUILD_NUMBER}"
+      echo "Jenkins Node Name ${env.NODE_NAME}"
+  
+      echo "Jenkins Home ${env.JENKINS_HOME}"
+      echo "Jenkins URL ${env.JENKINS_URL}"
+      echo "JOB Name ${env.JOB_NAME}"
+      
     stage( 'CheckOutCodeFromGitHub')
 {
     git credentialsId: 'a779b7dc-a1d8-4549-93bb-b9289a876094', url: 'https://github.com/tejomaisgy/maven-web-application.git'
@@ -10,7 +19,7 @@ node
 {
 sh "${MavenHome}/bin/mvn clean package"
 }
-stage( 'SonarQubeReport')
+/*stage( 'SonarQubeReport')
 {
     sh "${MavenHome}/bin/mvn sonar:sonar"
 }  
@@ -24,7 +33,7 @@ stage( 'DeployingToTomcat')
     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.233.61.46:/opt/apache-tomcat-9.0.58/webapps"    
 }
     
-}
+}*/
     
 
 
