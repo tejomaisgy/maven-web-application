@@ -1,0 +1,85 @@
+pipeline
+
+{
+ 
+agent any
+
+tools{
+ maven 'Maven-3.8.4'
+}
+triggers{
+    pollSCM('* * * * *')
+}
+options{
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
+}
+
+
+stages
+{
+ stage( 'CheckOutCode' )
+ {
+  steps{
+   git credentialsId: 'a779b7dc-a1d8-4549-93bb-b9289a876094', url: 'https://github.com/tejomaisgy/maven-web-application.git'
+       }
+ }
+
+ stage('Build')
+{
+  steps{
+   sh "mvn clean package"
+}
+
+}
+stage('SonarQubeReport')
+
+{
+   steps{
+   sh "mvn sonar:sonar" 
+   
+      }
+} 
+
+stage('UploadingToNexus')
+{
+    steps{
+    sh "mvn clean deploy"
+        }
+}
+
+stage('DeployToTomcat')
+{
+    steps{
+   sshagent(['0959862e-be3e-488a-968d-6e45f479252e']) {
+sh "rm -rf /opt/apache-tomcat-9.0.58/webapps/maven-web-application-war"       
+   sh " scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.232.25.8:/opt/apache-tomcat-9.0.58/webapps/"
+}
+}
+  
+ }
+ /*
+ post{
+     always{
+    emailext body: '''Declarative-pipeline over
+
+Regards
+Sandya.''', subject: 'Declarative-pipeline status', to: 'sandya123@gmail.com'     
+         }
+    success{
+    emailext body: '''Declarative-pipeline over
+
+Regards
+Sandya.''', subject: 'Declarative-pipeline status', to: 'sandya123@gmail.com,tejomai123@gmail.com'    
+        
+    }   
+    failure{
+    emailext body: '''Declarative-pipeline over
+
+Regards
+Sandya.''', subject: 'Declarative-pipeline status', to: 'nanu123@gmail.com,sagna123@gmail.com'    
+        
+    }
+ }
+ */
+}
+}
