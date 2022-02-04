@@ -50,10 +50,8 @@ stage('UploadingToNexus')
 stage('DeployToTomcat')
 {
     steps{
-   sshagent(['61e541e1-32d6-4841-9324-e14fe497eab6']) {
-    
-
-sh "rm -rf /opt/apache-tomcat-9.0.58/webapps/maven-web-application.war"       
+   sshagent(['0959862e-be3e-488a-968d-6e45f479252e']) {
+    sh "rm -rf /opt/apache-tomcat-9.0.58/webapps/maven-web-application.war"       
    sh " scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@http://13.126.236.179/:/opt/apache-tomcat-9.0.58/webapps"
 }
 }
