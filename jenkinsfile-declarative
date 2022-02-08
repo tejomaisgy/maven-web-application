@@ -3,7 +3,7 @@ pipeline
 {
  
 agent{
-agent 'Nodejs_Job'
+label 'Nodejs_Job'
 }
 
 tools{
