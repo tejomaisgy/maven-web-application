@@ -2,7 +2,9 @@ pipeline
 
 {
  
-agent any
+agent{
+agent 'Nodejs_Job'
+}
 
 tools{
  maven 'Maven-3.8.4'
